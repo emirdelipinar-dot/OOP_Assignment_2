@@ -5,7 +5,23 @@ public class Circle extends Shape {
         super(0, coord);
         this.radius = radius;
     }
+    @Override
+    public void scale(int factor, boolean sign) {
+        if (sign) this.radius *= factor;
+        else this.radius /= factor;
+    }
 
+    @Override
+    public double getArea() { return Math.PI * radius * radius; }
+
+    @Override
+    public double getPerimeter() { return 2 * Math.PI * radius; }
+
+    @Override
+    public String display() {
+        return "Circle [Radius: " + radius + ", Position: " + position.display() +
+                ", Area: " + String.format("%.2f", getArea()) + "]";
+    }
 
 
 
