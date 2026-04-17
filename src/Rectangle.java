@@ -18,4 +18,18 @@ public class Rectangle extends Shape {
             length /= factor;
         }
     }
+    @Override
+    public double getArea() { return width * length; }
+
+    @Override
+    public double getPerimeter() { return 2 * (width + length); }
+
+    @Override
+    public String display() {
+        return "Rectangle [Width: " + width + ", Length: " + length +
+                ", Pos: " + position.display() + ", Area: " + getArea() + "]";
+    }
+
+
+
 }
