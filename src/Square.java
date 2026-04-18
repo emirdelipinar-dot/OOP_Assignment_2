@@ -6,6 +6,16 @@ public class Square extends Shape {
         this.side = side;
     }
 
+    public static boolean isValid(double width, double length) {
+        /* Ensures dimensions are positive non-zero values */
+        return width > 0 && length > 0;
+    }
+
+    public static boolean isValid(double side) {
+        /* Ensures the side length is a positive non-zero value */
+        return side > 0;
+    }
+
     @Override
     public void scale(int factor, boolean sign) {
         if (sign) side *= factor;
