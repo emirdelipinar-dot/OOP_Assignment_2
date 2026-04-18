@@ -18,5 +18,15 @@ public class ShapeList {
     public void scaleShapes(int factor, boolean sign) {
         for (Shape s : listOfShapes) s.scale(factor, sign);
     }
+    public String displayAll() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < listOfShapes.size(); i++) {
+            sb.append((i + 1)).append(": ").append(listOfShapes.get(i).display()).append("\n");
+        }
+        return sb.toString();
+    }
 
+    public Shape getShape(int pos) {
+        return (pos > 0 && pos <= listOfShapes.size()) ? listOfShapes.get(pos-1) : null;
+    }
 }
