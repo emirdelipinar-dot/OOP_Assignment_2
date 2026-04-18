@@ -7,35 +7,32 @@ public class Triangle extends Shape {
         this.p3 = p3;
     }
 
-    /* Validation: Checks if three points form a valid triangle using the Triangle Inequality Theorem */
+    /* Validates triangle using the rule: a + b > c > |a - b| */
     public static boolean isValid(Coordinates c1, Coordinates c2, Coordinates c3) {
         double a = c1.distance(c2);
         double b = c2.distance(c3);
         double c = c3.distance(c1);
-        // A triangle is valid if the sum of any two sides is greater than the third side
-        return (a + b > c) && (a + c > b) && (b + c > a);
+
+        /* Checking all sides against the sum and absolute difference of the others */
+        boolean checkA = (b + c > a) && (a > Math.abs(b - c));
+        boolean checkB = (a + c > b) && (b > Math.abs(a - c));
+        boolean checkC = (a + b > c) && (c > Math.abs(a - b));
+
+        return checkA && checkB && checkC;
     }
 
-    /* Implementation of Heron's Formula to calculate the area of the triangle */
     @Override
     public double getArea() {
         double a = position.distance(p2);
         double b = p2.distance(p3);
         double c = p3.distance(position);
-        double s = (a + b + c) / 2.0; // Semiperimeter
+        double s = (a + b + c) / 2.0;
         return Math.sqrt(s * (s - a) * (s - b) * (s - c));
     }
 
     @Override
     public double getPerimeter() {
-        return position.distance(p2) + p2.distance(p3) + position.distance(p3);
-    }
-
-    @Override
-    public void translate(int dx, int dy) {
-        position.translate(dx, dy);
-        p2.translate(dx, dy);
-        p3.translate(dx, dy);
+        return position.distance(p2) + p2.distance(p3) + p3.distance(position);
     }
 
     @Override
@@ -47,6 +44,6 @@ public class Triangle extends Shape {
 
     @Override
     public String display() {
-        return "Triangle [Vertices: " + position.display() + ", " + p2.display() + ", " + p3.display() + "]";
+        return "Triangle [P1: " + position.display() + ", P2: " + p2.display() + ", P3: " + p3.display() + "]";
     }
 }
