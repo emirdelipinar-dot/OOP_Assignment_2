@@ -16,70 +16,72 @@ public class Main {
         while (true) {
             try {
                 System.out.print(menu);
-                String choiceStr = input.next(); // Reading as String to prevent scanner crashes
-                char choice = choiceStr.charAt(0);
+                String choice = input.nextLine().trim();
 
-                if (choice == '4') {
-                    System.out.println("Exiting the programme...");
+                if (choice.equals("4")) {
+                    System.out.println("Exiting the programme. Goodbye!");
                     break;
                 }
 
-                switch (choice) {
-                    case '1':
-                        System.out.print("Enter shape type (C, T, S, R): ");
-                        char type = input.next().toUpperCase().charAt(0);
+                if (choice.equals("1")) {
+                    boolean shapeAdded = false;
+                    // Inner loop to keep the user in "Add Shape" section until successful
+                    while (!shapeAdded) {
+                        System.out.print("Enter shape type (C: Circle, T: Triangle, S: Square, R: Rectangle) or 'M' for Main Menu: ");
+                        String typeIn = input.nextLine().toUpperCase().trim();
 
-                        System.out.print("Enter X and Y coordinates: ");
+                        if (typeIn.isEmpty()) continue;
+                        char type = typeIn.charAt(0);
+
+                        if (type == 'M') break; // Back to main menu option
+
+                        if (type != 'C' && type != 'T' && type != 'S' && type != 'R') {
+                            System.out.println("Invalid Input: Please only enter C, T, S, or R.");
+                            continue; // Asks the same question again
+                        }
+
+                        // Coordinates input (Generic for all shapes)
+                        System.out.print("Enter X and Y for position: ");
                         int x = input.nextInt();
                         int y = input.nextInt();
                         Coordinates pos = new Coordinates(x, y);
 
                         if (type == 'C') {
                             System.out.print("Enter radius: ");
-                            double r = input.nextDouble();
-                            myShapes.addShape(new Circle(pos, r));
-                        } else if (type == 'T') {
-                            System.out.print("Enter P2(x y) and P3(x y): ");
-                            Coordinates p2 = new Coordinates(input.nextInt(), input.nextInt());
-                            Coordinates p3 = new Coordinates(input.nextInt(), input.nextInt());
-                            if (Triangle.isValid(pos, p2, p3)) {
-                                myShapes.addShape(new Triangle(pos, p2, p3));
-                            } else {
-                                System.out.println("Error: Invalid coordinates for a triangle.");
-                            }
-                        } else if (type == 'S') {
-                            System.out.print("Enter side length: ");
-                            double s = input.nextDouble();
-                            myShapes.addShape(new Square(pos, s));
+                            myShapes.addShape(new Circle(pos, input.nextDouble()));
+                            shapeAdded = true;
                         } else if (type == 'R') {
                             System.out.print("Enter width and length: ");
-                            double w = input.nextDouble();
-                            double l = input.nextDouble();
-                            myShapes.addShape(new Rectangle(pos, w, l));
+                            myShapes.addShape(new Rectangle(pos, input.nextDouble(), input.nextDouble()));
+                            shapeAdded = true;
+                        } else if (type == 'S') {
+                            System.out.print("Enter side length: ");
+                            myShapes.addShape(new Square(pos, input.nextDouble()));
+                            shapeAdded = true;
+                        } else if (type == 'T') {
+                            System.out.print("Enter X Y for P2: ");
+                            Coordinates p2 = new Coordinates(input.nextInt(), input.nextInt());
+                            System.out.print("Enter X Y for P3: ");
+                            Coordinates p3 = new Coordinates(input.nextInt(), input.nextInt());
+                            myShapes.addShape(new Triangle(pos, p2, p3));
+                            shapeAdded = true;
                         }
-                        break;
-
-                    case '2':
-                        System.out.print("Enter shape ID to remove: ");
-                        int id = input.nextInt();
-                        myShapes.removeShape(id);
-                        break;
-
-                    case '3':
-                        System.out.println("\n----- List of all Shapes -----");
-                        System.out.println(myShapes.displayAll());
-                        break;
-
-                    default:
-                        System.out.println("Invalid choice, please try again.");
+                        input.nextLine(); // Clear buffer after successful addition
+                    }
+                } else if (choice.equals("2")) {
+                    System.out.print("Enter ID: ");
+                    myShapes.removeShape(Integer.parseInt(input.nextLine()));
+                } else if (choice.equals("3")) {
+                    System.out.println(myShapes.displayAll());
                 }
+
             } catch (Exception e) {
-                /* Catching all possible exceptions to prevent the programme from crashing */
-                System.out.println("An error occurred: Invalid input or operation.");
-                input.nextLine(); // Clear the buffer
+                /* General Exception handling for geometrical and numerical errors
+                   (UK English comments) */
+                System.out.println("Programme Alert: " + e.getMessage());
+                if (input.hasNextLine()) input.nextLine(); // Flush scanner buffer
             }
         }
         input.close();
     }
 }
-
